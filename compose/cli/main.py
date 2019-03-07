@@ -1047,6 +1047,7 @@ class TopLevelCommand(object):
             --scale SERVICE=NUM        Scale SERVICE to NUM instances. Overrides the
                                        `scale` setting in the Compose file if present.
             --env-file PATH            Specify an alternate environment file
+            --pull                     Pull images before running the containers
         """
         start_deps = not options['--no-deps']
         always_recreate_deps = options['--always-recreate-deps']
@@ -1057,6 +1058,10 @@ class TopLevelCommand(object):
         remove_orphans = options['--remove-orphans']
         detached = options.get('--detach')
         no_start = options.get('--no-start')
+        pull = options.get('--pull')
+
+        if pull:
+            self.pull(options)
 
         if detached and (cascade_stop or exit_value_from):
             raise UserError("--abort-on-container-exit and -d cannot be combined.")
